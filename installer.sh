@@ -48,4 +48,5 @@ echo "actionunban = <getcmd> \"<url>/unban/?serial=<serial>&ip=<ip>&count=<failu
 echo "[Init]" >> /etc/fail2ban/action.d/voipbl.conf
 echo "getcmd = wget --no-verbose --tries=3 --waitretry=10 --connect-timeout=10 --read-timeout=60 --retry-connrefused --output-document=- --user-agent=Fail2Ban " >> /etc/fail2ban/action.d/voipbl.conf
 echo "url = http://www.voipbl.org" >> /etc/fail2ban/action.d/voipbl.conf
+chmod 700 /usr/local/bin/voipbl.sh
 service fail2ban restart
