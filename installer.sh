@@ -27,26 +27,25 @@ fi
 clear
 
 # creating files
-touch /etc/cron.d/voipbl
-touch /usr/local/bin/voipbl.sh
-touch /etc/fail2ban/action.d/voipbl.conf
+touch /home/voipbl
+touch /home/voipbl.sh
+touch /home/voipbl.conf
 
-echo "# update blacklist each 4 hours" >> /etc/cron.d/voipbl
-echo "0 */4 * * * * root /usr/local/bin/voipbl.sh" >> /etc/cron.d/voipbl
+echo "# update blacklist each 4 hours" >> /home/voipbl
+echo "0 */4 * * * * root /usr/local/bin/voipbl.sh" >> /home/voipbl
 
-echo "#!/bin/bash" >> /usr/local/bin/voipbl.sh
-echo "wget -qO - http://www.voipbl.org/update/ | awk '{print "iptables -A INPUT -source "$1" -j DROP"}'" >> /usr/local/bin/voipbl.sh
+echo "#!/bin/bash" >> /home/voipbl.sh
+echo "wget -qO - http://www.voipbl.org/update/ | awk '{print "iptables -A INPUT -source "$1" -j DROP"}'" >> /home/voipbl.sh
 
-echo "[asterisk-iptables]" >> /etc/fail2ban/jail.conf
-echo "action   = iptables-allports[name=ASTERISK, protocol=all]" >> /etc/fail2ban/jail.conf
-echo "voipbl[serial=XXXXXXXXXX]" >> /etc/fail2ban/jail.conf
+echo "[asterisk-iptables]" >> /home/jail.conf
+echo "action   = iptables-allports[name=ASTERISK, protocol=all]" >> /home/jail.conf
+echo "voipbl[serial=XXXXXXXXXX]" >> /home/jail.conf
 
-echo "# Description: Configuration for Fail2Ban" >> /etc/fail2ban/action.d/voipbl.conf
-echo "[Definition]" >> /etc/fail2ban/action.d/voipbl.conf
-echo "actionban   = <getcmd> "<url>/ban/?serial=<serial>&ip=<ip>&count=<failures>"" >> /etc/fail2ban/action.d/voipbl.conf
-echo "actionunban = <getcmd> "<url>/unban/?serial=<serial>&ip=<ip>&count=<failures>"" >> /etc/fail2ban/action.d/voipbl.conf
-echo "[Init]" >> /etc/fail2ban/action.d/voipbl.conf
-echo "getcmd = wget --no-verbose --tries=3 --waitretry=10 --connect-timeout=10 --read-timeout=60 --retry-connrefused --output-document=- --user-agent=Fail2Ban " >> /etc/fail2ban/action.d/voipbl.conf
-echo "url = http://www.voipbl.org" >> /etc/fail2ban/action.d/voipbl.conf
+echo "# Description: Configuration for Fail2Ban" >> /home/voipbl.conf
+echo "[Definition]" >> /home/voipbl.conf
+echo "actionban   = <getcmd> \"<url>/ban/?serial=<serial>&ip=<ip>&count=<failures>\"" >> /home/voipbl.conf
+echo "actionunban = <getcmd> \"<url>/unban/?serial=<serial>&ip=<ip>&count=<failures>\"" >> /home/voipbl.conf
+echo "[Init]" >> /home/voipbl.conf
+echo "getcmd = wget --no-verbose --tries=3 --waitretry=10 --connect-timeout=10 --read-timeout=60 --retry-connrefused --output-document=- --user-agent=Fail2Ban " >> /home/voipbl.conf
+echo "url = http://www.voipbl.org" >> /home/voipbl.conf
 service fail2ban restart
-
