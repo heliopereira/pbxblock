@@ -1,5 +1,4 @@
 
-
 #!/bin/bash
 
 if [[ $EUID -ne 0 ]]; then
@@ -40,7 +39,7 @@ echo "# update blacklist each 4 hours
 0 */4 * * * * root /usr/local/bin/voipbl.sh" >> /etc/cron.d/voipbl
 
 echo "#!/bin/bash
-wget -qO - http://www.voipbl.org/update/ | awk '{print \"iptables -A INPUT -source \"\$1\" -j DROP\"}'" >> /usr/local/bin/voipbl.sh
+wget -qO - http://www.voipbl.org/update/ | awk '{print "iptables -A INPUT -s "$1" -j DROP"}' >> /usr/local/bin/voipbl.sh
 
 echo "[asterisk-iptables]
 action   = iptables-allports[name=ASTERISK, protocol=all]
