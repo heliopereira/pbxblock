@@ -58,6 +58,7 @@ ln -s /usr/local/bin/voipbl.sh /etc/cron.hourly/voipbl.sh
 service fail2ban restart
 
 echo "Script install complete"
+echo "For help or other things that might come up visit us at #voipcoop on freenode"
 
 sleep 5
 exit
