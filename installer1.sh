@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 if [[ $EUID -ne 0 ]]; then
@@ -31,12 +30,12 @@ shopt -u nocasematch
 clear
 
 # creating files
-touch /etc/cron.d/voipbl
+# touch /etc/cron.d/voipbl
 touch /usr/local/bin/voipbl.sh
 touch /etc/fail2ban/action.d/voipbl.conf
 
-echo "# update blacklist each 4 hours
-0 */4 * * * * root /usr/local/bin/voipbl.sh" >> /etc/cron.d/voipbl
+# echo "# update blacklist each 4 hours
+# 0 */4 * * * * root /usr/local/bin/voipbl.sh" >> /etc/cron.d/voipbl
 
 echo "#!/bin/bash
 wget -qO - http://www.voipbl.org/update/ | awk '{print "iptables -A INPUT -s "$1" -j DROP"}' >> /usr/local/bin/voipbl.sh
@@ -52,6 +51,9 @@ actionunban = <getcmd> \"<url>/unban/?serial=<serial>&ip=<ip>&count=<failures>\"
 [Init]
 getcmd = wget --no-verbose --tries=3 --waitretry=10 --connect-timeout=10 --read-timeout=60 --retry-connrefused --output-document=- --user-agent=Fail2Ban
 url = http://www.voipbl.org" >> /etc/fail2ban/action.d/voipbl.conf
+
+chmod 700 /usr/local/bin/voipbl.sh
+ln -s /usr/local/bin/voipbl.sh /etc/cron.hourly/voipbl.sh
 
 service fail2ban restart
 
